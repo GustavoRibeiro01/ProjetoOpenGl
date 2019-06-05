@@ -188,10 +188,6 @@ namespace ProjetoNave
 
             if (cy <= -9.0f) { cy = 8.7f; }
 
-
-
-
-
             // Redesenha o quadrado com as novas coordenadas
             Glut.glutPostRedisplay();
             Glut.glutTimerFunc(1, moverAsteroid, 1);
