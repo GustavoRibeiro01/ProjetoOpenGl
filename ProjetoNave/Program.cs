@@ -29,7 +29,7 @@ namespace ProjetoNave
 
 
 
-        static void inicializa()
+        static void Inicializa()
         {
             Gl.glMatrixMode(Gl.GL_PROJECTION);
             Gl.glLoadIdentity();
@@ -46,7 +46,7 @@ namespace ProjetoNave
             Gl.glShadeModel(Gl.GL_SMOOTH);
         }
 
-        static void desenha()
+        static void Desenha()
         {
             Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
 
@@ -80,7 +80,7 @@ namespace ProjetoNave
 
             Glut.glutSwapBuffers();
         }
-        static void moverAsteroid(int value)//move o asteroid em time
+        static void MoverAsteroid(int value)//move o asteroid em time
         {
             // Muda a direção quando chega na borda esquerda ou direita
             if (ax > 6.5f || ax < -6.5f)
@@ -111,10 +111,10 @@ namespace ProjetoNave
 
             //-------------------------------Colisão----------------------------------------------
 
-            float DiferencaX = PedraX - nx;
-            float DiferencaY = cy - ny;
+            float diferencaX = PedraX - nx;
+            float diferencaY = cy - ny;
 
-            if(Math.Abs(DiferencaX) < 1.1f && Math.Abs(DiferencaY) < 0.6f)
+            if(Math.Abs(diferencaX) < 1.1f && Math.Abs(diferencaY) < 0.6f)
             {
                 Console.WriteLine("Game Over!");
             }
@@ -123,7 +123,7 @@ namespace ProjetoNave
 
             // Redesenha o quadrado com as novas coordenadas
             Glut.glutPostRedisplay();
-            Glut.glutTimerFunc(1, moverAsteroid, 1);
+            Glut.glutTimerFunc(1, MoverAsteroid, 1);
 
             rot -= 0.2f;// Velocidade do giro do asteroid
                         // Redesenha o quadrado com as novas coordenadas
@@ -179,11 +179,11 @@ namespace ProjetoNave
             Glut.glutInitWindowSize(600, 600);
             Glut.glutInitWindowPosition(100, 100);
             Glut.glutCreateWindow("não sei");
-            inicializa();
+            Inicializa();
             Gl.glEnable(Gl.GL_DEPTH_TEST);
-            Glut.glutDisplayFunc(desenha);
+            Glut.glutDisplayFunc(Desenha);
             Glut.glutSpecialFunc(Teclasnave);
-            Glut.glutTimerFunc(50, moverAsteroid, 1);
+            Glut.glutTimerFunc(50, MoverAsteroid, 1);
 
             Glut.glutMainLoop();
 
