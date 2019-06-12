@@ -12,6 +12,8 @@ namespace ProjetoNave
     {
         static float rot = 0.0f;
         static double size = 2.0f;
+
+        static float PedraX = 5.0f;
         //variaveis asteroide
         static float ax = 0.0f;
         static float ay = 0.0f;
@@ -20,9 +22,9 @@ namespace ProjetoNave
         static float xstep = 0.008f;
         static float ystep = 0.008f;
 
-        //variaveis nave
-        static float nx = 0.0f;
-        static float ny = -9.5f;
+        //variaveis para locomover a bola
+        static float nx = 0.0f; //Mover para esquerda ou para direita
+        static float ny = -9.5f; //Mover para cima ou para baixo (não usado no momento)
 
         //variavel do cenario
         static float cx = 0.0f;
@@ -37,7 +39,7 @@ namespace ProjetoNave
             Glu.gluPerspective(35.0f, 1.0, 0.001, 100.0);
             Gl.glMatrixMode(Gl.GL_MODELVIEW);
             Glu.gluLookAt(0.0, 14.0, 14.0, 0.0, 5.0, 5.0, 0.0, 10.0, 0.0);
-            Gl.glClearColor(0.0980392f, 0.0980392f, 0.439216f, 0.0f);
+            Gl.glClearColor(0, 1, 0, 0.0f);
 
             Gl.glEnable(Gl.GL_DEPTH_TEST);
             Gl.glEnable(Gl.GL_LIGHT0);
@@ -51,115 +53,33 @@ namespace ProjetoNave
         {
             Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
 
-            //estrelas
+            //Pedra
             Gl.glPushMatrix();//salva para mover so estes objetos
-            Gl.glColor3f(0.0f, 0.5f, 0.9f);
-            Gl.glPointSize(5);
-            Gl.glTranslated(0.0f, cy, -1.5f);
-            Gl.glScalef(8.0F, 7.0F, 0.0F);
-            Gl.glBegin(Gl.GL_POINTS);
 
+            Gl.glTranslated(PedraX, cy, 0f);
 
-            Gl.glVertex2f(0.1f, 0.2f);
-            Gl.glVertex2f(0.5f, 0.2f);
-            Gl.glVertex2f(0.4f, 0.7f);
-            Gl.glVertex2f(0.3f, 0.1f);
-            Gl.glVertex2f(0.5f, 0.8f);
-            Gl.glVertex2f(0.6f, 0.2f);
-            Gl.glVertex2f(-0.1f, 0.54f);
-            Gl.glVertex2f(0.4f, -0.6f);
-            Gl.glVertex2f(0.5f, -0.7f);
-            Gl.glVertex2f(-0.43f, 0.123f);
-            Gl.glVertex2f(-0.1f, -0.89f);
-            Gl.glVertex2f(-0.21f, -0.2f);
-            Gl.glVertex2f(0.1f, -0.33f);
-            Gl.glVertex2f(-0.33f, 0.44f);
-            Gl.glVertex2f(-0.1f, 0.2f);
-            Gl.glVertex2f(-0.56f, 0.3f);
-            Gl.glVertex2f(-0.66f, 0.4f);
-            Gl.glVertex2f(-0.78f, 0.8f);
-            Gl.glVertex2f(-0.34f, 0.4f);
-            Gl.glVertex2f(-0.56f, -0.56f);
-            Gl.glVertex2f(-0.76f, -0.73f);
-            Gl.glVertex2f(-0.89f, -0.80f);
-            Gl.glVertex2f(-0.99f, -0.30f);
-            Gl.glVertex2f(-0.74f, -0.15f);
-            Gl.glVertex2f(0.1f, 0.2f);
-            Gl.glTranslated(0.0f, 1.0F, 0.0f);
-            Gl.glVertex2f(0.1f, 0.2f);
-            Gl.glVertex2f(0.5f, 0.2f);
-            Gl.glVertex2f(0.4f, 0.7f);
-            Gl.glVertex2f(0.3f, 0.1f);
-            Gl.glVertex2f(0.5f, 0.8f);
-            Gl.glVertex2f(0.6f, 0.2f);
-            Gl.glVertex2f(-0.1f, 0.54f);
-            Gl.glVertex2f(0.4f, -0.6f);
-            Gl.glVertex2f(0.5f, -0.7f);
-            Gl.glVertex2f(-0.43f, 0.123f);
-            Gl.glVertex2f(-0.1f, -0.89f);
-            Gl.glVertex2f(-0.21f, -0.2f);
-            Gl.glVertex2f(0.1f, -0.33f);
-            Gl.glVertex2f(-0.33f, 0.44f);
-            Gl.glVertex2f(-0.1f, 0.2f);
-            Gl.glVertex2f(-0.56f, 0.3f);
-            Gl.glVertex2f(-0.66f, 0.4f);
-            Gl.glVertex2f(-0.78f, 0.8f);
-            Gl.glVertex2f(-0.34f, 0.4f);
-            Gl.glVertex2f(-0.56f, -0.56f);
-            Gl.glVertex2f(-0.76f, -0.73f);
-            Gl.glVertex2f(-0.89f, -0.80f);
-            Gl.glVertex2f(-0.99f, -0.30f);
-            Gl.glVertex2f(-0.74f, -0.15f);
-            Gl.glVertex2f(0.1f, 0.2f);
-            Gl.glEnd();
+            Gl.glColor3f(0.5f, 0.35f, 0.05f);
+
+            Glut.glutSolidSphere(0.7, 5, 10);
 
 
             Gl.glPopMatrix();//apaga da pilha
 
-            //asteroid
-            Gl.glPushMatrix();
-            Gl.glTranslatef(0.5f, 0.6f, 0.0f);
-
-
-
-            Gl.glTranslatef(ax, ay, 0.0f);
-            Gl.glColor3f(0.666667f, 0.666667f, 0.666667f);
-            Gl.glRotatef(rot, 0.0f, 0.0f, 0.2f);
-            //Gl.glTranslatef(-0.5f, -0.6f, 0.0f);
-            Glut.glutSolidSphere(0.5, 10, 10);
-            Gl.glPopMatrix();
-
-            //asteroid
-            Gl.glPushMatrix();
-            Gl.glTranslatef(-1.5f, -1.6f, 0.0f);
-
-
-
-            Gl.glTranslatef(-ax, ay, 0.0f);
-            Gl.glColor3f(0.666667f, 0.666667f, 0.666667f);
-            Gl.glRotatef(rot, 0.0f, 0.0f, 0.2f);
-            //Gl.glTranslatef(-0.5f, -0.6f, 0.0f);
-            Glut.glutSolidSphere(0.5, 10, 10);
-            Gl.glPopMatrix();
-
-            //nave
+            //---------------------------------------------------------------------
+           
+            //Bola Rolando
             Gl.glPushMatrix();//salva para mover so estes objetos
-            Gl.glTranslatef(nx, ny, 0.0f);
+            Gl.glTranslatef(nx, -7.0f, 0.0f);
+
+            //Console.WriteLine(ny);
+
             Gl.glRotatef(90, 0.0f, 0.2f, 0.0f);
 
-            Gl.glColor3f(0.698039f, 0.133333f, 0.133333f);
-            Glut.glutSolidCube(0.7);
-            Gl.glTranslatef(0.8f, 0.0f, 0.0f);
-            Glut.glutSolidTetrahedron();
-            Gl.glTranslatef(0.8f, 0.0f, 0.0f);
-            Glut.glutSolidTetrahedron();
-            Gl.glTranslatef(0.0f, -1.2f, 0.0f);
-
-
+            Gl.glColor3f(1.0f, 0.666667f, 0.666667f);
+            Gl.glRotatef(rot, 0.0f, 0.0f, 0.2f);
+            Glut.glutSolidSphere(0.5, 10, 10);
 
             Gl.glPopMatrix();//apaga da pilha
-
-
 
             Glut.glutSwapBuffers();
         }
@@ -185,8 +105,24 @@ namespace ProjetoNave
 
             cy -= 0.020f;
 
+            //Voltar pedra ao inicio da tela
+            if (cy <= -9.0f)
+            {
+                cy = 8.7f;
+                PedraX = -5.0f; //Numero rondomico de -5 a 5
+            }
 
-            if (cy <= -9.0f) { cy = 8.7f; }
+            //-------------------------------Colisão----------------------------------------------
+
+            float DiferencaX = PedraX - nx;
+            float DiferencaY = cy - ny;
+
+            if(Math.Abs(DiferencaX) < 1.1f && Math.Abs(DiferencaY) < 0.6f)
+            {
+                Console.WriteLine("Game Over!");
+            }
+
+            //------------------------------------------------------------------------------------
 
             // Redesenha o quadrado com as novas coordenadas
             Glut.glutPostRedisplay();
