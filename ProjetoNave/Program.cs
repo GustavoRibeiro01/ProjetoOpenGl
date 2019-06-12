@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tao.FreeGlut;
 using Tao.OpenGl;
 
@@ -29,6 +25,7 @@ namespace ProjetoNave
         //variavel do cenario
         static float cx = 0.0f;
         static float cy = 0.0f;
+
 
 
 
