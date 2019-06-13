@@ -11,6 +11,8 @@ namespace ProjetoNave
     class Program
     {
         static float rot = 0.0f; //Responsavel por rotacionar a bola principal
+        static bool DuasPedras; //Habilitar segunda pedra
+        static int Pontuacao = 0;
 
         //Variaveis Pedra Esquerda
         static float PedraEsquerda_X = 5.0f;
@@ -22,7 +24,7 @@ namespace ProjetoNave
 
         //variaveis para locomover a bola
         static float Bola_X = 0.0f; //Mover para esquerda ou para direita
-        static float Bola_Y = -9.5f; //Mover para cima ou para baixo (estatico no momento)
+        static float Bola_Y = -9.0f; //Mover para cima ou para baixo (estatico no momento)
 
         //Variaveis para guardar momento de colisão
         //static float Bola_X
@@ -48,11 +50,11 @@ namespace ProjetoNave
         {
             Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
 
-            //-------------------------Pedra--------------------------------------
+            //-------------------------Pedra Direita--------------------------------------
 
             Gl.glPushMatrix();//salva para mover so estes objetos
 
-            Gl.glTranslated(PedraEsquerda_X, PedraEsquerda_Y, 0f);
+            Gl.glTranslated(PedraDireita_X, PedraDireita_Y, 0f);
 
             Gl.glColor3f(0.5f, 0.35f, 0.05f);
 
@@ -62,7 +64,25 @@ namespace ProjetoNave
             Gl.glPopMatrix(); //apaga da pilha
 
             //---------------------------------------------------------------------
-           
+
+            if (DuasPedras)
+            {
+                //-------------------------Pedra Esquerda--------------------------------------
+
+                Gl.glPushMatrix();//salva para mover so estes objetos
+
+                Gl.glTranslated(PedraEsquerda_X, PedraEsquerda_Y, 0f);
+
+                Gl.glColor3f(0.5f, 0.35f, 0.05f);
+
+                Glut.glutSolidSphere(0.7, 5, 10);
+
+
+                Gl.glPopMatrix(); //apaga da pilha
+
+                //---------------------------------------------------------------------
+            }
+
             //---------------------Bola Rolando--------------------------------------
 
             Gl.glPushMatrix();//salva para mover so estes objetos
@@ -79,28 +99,56 @@ namespace ProjetoNave
             Glut.glutSwapBuffers();
         }
 
+        private static float VelocidadePedra_Esquerda = 0.0030f;
+        private static float VelocidadePedra_Direita = 0.0030f;
+
         static void MoverPedra(int value) //move as pedras em time
         {
-            PedraEsquerda_Y -= 0.020f;
+            PedraDireita_Y -= VelocidadePedra_Direita;
+
+            if (DuasPedras)
+                PedraEsquerda_Y -= VelocidadePedra_Esquerda;
 
             //-----------------------Voltar pedra ao inicio da tela-----------------------------
 
-            if (PedraEsquerda_Y <= -9.0f)
+            //if (PedraEsquerda_Y <= -9.0f)
+            //{
+            //    PedraEsquerda_Y = 8.7f;
+            //    PedraEsquerda_X = -5.0f; //Numero rondomico de -5 a 5
+            //}
+
+            if (PedraEsquerda_Y <= -9.0f || PedraDireita_Y <= -9.0f)
             {
-                PedraEsquerda_Y = 8.7f;
-                PedraEsquerda_X = -5.0f; //Numero rondomico de -5 a 5
+                Pontuacao += 1;
+                Console.WriteLine($"Pontuação: {Pontuacao}");
             }
+
+            Funcao.VerificaFinalPedra(ref PedraDireita_X, ref PedraDireita_Y, ref VelocidadePedra_Direita, ref PedraEsquerda_X, ref PedraEsquerda_Y, ref VelocidadePedra_Esquerda, ref Pontuacao, ref DuasPedras, ref rot);
 
             //-----------------------------------------------------------------------------------
 
             //-------------------------------Colisão----------------------------------------------
 
-            float DiferencaX = PedraEsquerda_X - Bola_X;
-            float DiferencaY = PedraEsquerda_Y - Bola_Y;
+            float DiferencaDireita_X = PedraEsquerda_X - Bola_X;
+            float DiferencaDireita_Y = PedraEsquerda_Y - Bola_Y;
 
-            if (Math.Abs(DiferencaX) < 1.05f && Math.Abs(DiferencaY) < 0.6f)
+            float DiferencaEsquerda_X = PedraDireita_X - Bola_X;
+            float DiferencaEsquerda_Y = PedraDireita_Y - Bola_Y;
+
+            if ((Math.Abs(DiferencaDireita_X) < 1.05f && Math.Abs(DiferencaDireita_Y) < 1.5f) || (Math.Abs(DiferencaEsquerda_X) < 1.05f && Math.Abs(DiferencaEsquerda_Y) < 1.5f))
             {
                 Console.WriteLine("Game Over!");
+                ManipulaArquivo arquivo = new ManipulaArquivo(@"pontuacao.txt");
+                var MelhorPontuacao = arquivo.LerPontuacao();
+                Console.WriteLine("Sua pontuação: "+Pontuacao);
+                Console.WriteLine("Pontuação Máxima: "+ MelhorPontuacao);
+                if (Pontuacao > MelhorPontuacao)
+                {
+                    Console.WriteLine("Parabéns!! Nova Pontuação Máxima: " + Pontuacao);
+
+                    arquivo.EscreverPontuacao(Pontuacao);
+                }
+                Console.ReadKey();
             }
 
             //------------------------------------------------------------------------------------
@@ -108,7 +156,9 @@ namespace ProjetoNave
             Glut.glutPostRedisplay();
             Glut.glutTimerFunc(1, MoverPedra, 1);
 
+            Console.WriteLine($"Rotacao: {rot}");
             rot -= 0.2f; // Velocidade do giro da bola principal
+           // Console.WriteLine($"rot: {rot}");
                          
         }
 

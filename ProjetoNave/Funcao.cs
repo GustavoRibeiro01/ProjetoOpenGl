@@ -4,13 +4,13 @@ namespace ProjetoNave
 {
     public static class Funcao
     {
-        static int maxNivel1 = 5;
-        static int maxNivel2 = 10;
-        static int maxNivel3 = 15;
-        static int maxNivel4 = 20;
-        static int maxNivel5 = 35;
+        static int maxNivel1 = 3;
+        static int maxNivel2 = 6;
+        static int maxNivel3 = 9;
+        static int maxNivel4 = 12;
+        static int maxNivel5 = 15;
 
-        static void VerificaFinalPedra(ref double x_pedra_direita, ref double y_pedra_direita, ref double velocidade_pedra_direita, ref double x_pedra_esquerda, ref double y_pedra_esquerda, ref double velocidade_pedra_esquerda, ref double pontuacao, ref bool duas_pedra)
+        public static void VerificaFinalPedra(ref float x_pedra_direita, ref float y_pedra_direita, ref float velocidade_pedra_direita, ref float x_pedra_esquerda, ref float y_pedra_esquerda, ref float velocidade_pedra_esquerda, ref int pontuacao, ref bool duas_pedra, ref float rotacao)
         {
 
             if (y_pedra_direita <= -9.0f)
@@ -18,28 +18,31 @@ namespace ProjetoNave
                 //Velocidade
                 if (pontuacao <= maxNivel1)
                 {
-                    velocidade_pedra_direita = RandomNumber(20, 35) / 10000;
+                    velocidade_pedra_direita = RandomNumber(30, 45) / 10000;
+                    //rotacao = 400.1f;
                 }
                 else if (pontuacao <= maxNivel2)
                 {
-                    velocidade_pedra_direita = RandomNumber(35, 50) / 10000;
+                    velocidade_pedra_direita = RandomNumber(45, 60) / 10000;
+                    //rotacao = 0.2f;
                 }
                 else if (pontuacao <= maxNivel3)
                 {
-                    velocidade_pedra_direita = RandomNumber(20, 35) / 10000;
+                    velocidade_pedra_direita = RandomNumber(30, 45) / 10000;
+                    //rotacao = 0.3f;
                     duas_pedra = true;
                 }
                 else if (pontuacao <= maxNivel4)
                 {
-                    velocidade_pedra_direita = RandomNumber(35, 50) / 10000;
+                    velocidade_pedra_direita = RandomNumber(45, 50) / 10000;
                 }
                 else if (pontuacao <= maxNivel5)
                 {
-                    velocidade_pedra_direita = RandomNumber(50, 65) / 10000;
+                    velocidade_pedra_direita = RandomNumber(60, 80) / 10000;
                 }
 
                 //Posição
-                y_pedra_direita = 0;
+                y_pedra_direita = 8.7f;
                 if (duas_pedra)
                 {
                     x_pedra_direita = RandomNumber(1, 5);
@@ -61,28 +64,28 @@ namespace ProjetoNave
                     //Velocidade
                     if (pontuacao <= maxNivel1)
                     {
-                        velocidade_pedra_esquerda = RandomNumber(20, 35) / 10000;
+                        velocidade_pedra_esquerda = RandomNumber(30, 45) / 10000;
                     }
                     else if (pontuacao <= maxNivel2)
                     {
-                        velocidade_pedra_esquerda = RandomNumber(35, 50) / 10000;
+                        velocidade_pedra_esquerda = RandomNumber(45, 60) / 10000;
                     }
                     else if (pontuacao <= maxNivel3)
                     {
-                        velocidade_pedra_esquerda = RandomNumber(20, 35) / 10000;
+                        velocidade_pedra_esquerda = RandomNumber(30, 45) / 10000;
                         duas_pedra = true;
                     }
                     else if (pontuacao <= maxNivel4)
                     {
-                        velocidade_pedra_esquerda = RandomNumber(35, 50) / 10000;
+                        velocidade_pedra_esquerda = RandomNumber(45, 60) / 10000;
                     }
                     else if (pontuacao <= maxNivel5)
                     {
-                        velocidade_pedra_esquerda = RandomNumber(50, 65) / 10000;
+                        velocidade_pedra_esquerda = RandomNumber(60, 80) / 10000;
                     }
 
                     //Posição
-                    y_pedra_esquerda = 0;
+                    y_pedra_esquerda = 8.7f;
 
                     x_pedra_esquerda = RandomNumber(1, 5) * -1;
                     
@@ -91,9 +94,11 @@ namespace ProjetoNave
 
         }
 
-        private static int RandomNumber(int v1, int v2)
+        private static float RandomNumber(int min, int max)
         {
-            throw new NotImplementedException();
+            Random random = new Random();
+            return random.Next(min, max);
         }
     }
+    
 }

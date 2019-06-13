@@ -5,12 +5,7 @@ namespace ProjetoNave
 {
     public class ManipulaArquivo
     {
-        //ManipulaArquivo arquivo = new ManipulaArquivo(@"pontuacao.txt");
-        //var antigaPontuacao = arquivo.LerPontuacao();
-        //if(pontuacao > antigaPontuacao)
-        //{
-        //    arquivo.EscreverPontuacao(pontuacao);
-        //}
+        
 
     private string arquivo;
         public ManipulaArquivo(string arquivo)
