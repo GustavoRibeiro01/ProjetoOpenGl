@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tao.FreeGlut;
 using Tao.OpenGl;
 
@@ -10,26 +6,31 @@ namespace ProjetoNave
 {
     class Program
     {
-        static float rot = 0.0f; //Responsavel por rotacionar a bola principal
-        static bool DuasPedras; //Habilitar segunda pedra
-        static int Pontuacao = 0;
+        static float _rot = 0.0f; //Responsavel por rotacionar a bola principal
+        static bool _duasPedras; //Habilitar segunda pedra
+        static int _pontuacao = 0;
+
+        static bool _fim;
 
         //Variaveis Pedra Esquerda
-        static float PedraEsquerda_X = 5.0f;
-        static float PedraEsquerda_Y = 0.0f;
+        static float _pedraEsquerdaX = 5.0f;
+        static float _pedraEsquerdaY = 0.0f;
 
         //Variaveis Pedra Direita
-        static float PedraDireita_X = 5.0f;
-        static float PedraDireita_Y = 0.0f;
+        static float _pedraDireitaX = 5.0f;
+        static float _pedraDireitaY = 0.0f;
 
         //variaveis para locomover a bola
-        static float Bola_X = 0.0f; //Mover para esquerda ou para direita
-        static float Bola_Y = -9.0f; //Mover para cima ou para baixo (estatico no momento)
+        static float _bolaX = 0.0f; //Mover para esquerda ou para direita
+        static float _bolaY = -9.0f; //Mover para cima ou para baixo (estatico no momento)
 
         //Variaveis para guardar momento de colisão
         //static float Bola_X
 
-        static void inicializa()
+        private static float _velocidadePedraEsquerda = 0.0030f;
+        private static float _velocidadePedraDireita = 0.0030f;
+
+        static void Inicializa()
         {
             Gl.glMatrixMode(Gl.GL_PROJECTION);
             Gl.glLoadIdentity();
@@ -46,7 +47,7 @@ namespace ProjetoNave
             Gl.glShadeModel(Gl.GL_SMOOTH);
         }
 
-        static void desenha()
+        static void Desenha()
         {
             Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
 
@@ -54,7 +55,7 @@ namespace ProjetoNave
 
             Gl.glPushMatrix();//salva para mover so estes objetos
 
-            Gl.glTranslated(PedraDireita_X, PedraDireita_Y, 0f);
+            Gl.glTranslated(_pedraDireitaX, _pedraDireitaY, 0f);
 
             Gl.glColor3f(0.5f, 0.35f, 0.05f);
 
@@ -65,13 +66,13 @@ namespace ProjetoNave
 
             //---------------------------------------------------------------------
 
-            if (DuasPedras)
+            if (_duasPedras)
             {
                 //-------------------------Pedra Esquerda--------------------------------------
 
                 Gl.glPushMatrix();//salva para mover so estes objetos
 
-                Gl.glTranslated(PedraEsquerda_X, PedraEsquerda_Y, 0f);
+                Gl.glTranslated(_pedraEsquerdaX, _pedraEsquerdaY, 0f);
 
                 Gl.glColor3f(0.5f, 0.35f, 0.05f);
 
@@ -86,10 +87,10 @@ namespace ProjetoNave
             //---------------------Bola Rolando--------------------------------------
 
             Gl.glPushMatrix();//salva para mover so estes objetos
-            Gl.glTranslatef(Bola_X, -7.0f, 0.0f);
+            Gl.glTranslatef(_bolaX, -7.0f, 0.0f);
             Gl.glRotatef(90, 0.0f, 0.2f, 0.0f);
             Gl.glColor3f(1.0f, 0.666667f, 0.666667f);
-            Gl.glRotatef(rot, 0.0f, 0.0f, 0.2f);
+            Gl.glRotatef(_rot, 0.0f, 0.0f, 0.2f);
             Glut.glutSolidSphere(0.5, 10, 10);
 
             //-----------------------------------------------------------------------
@@ -99,15 +100,14 @@ namespace ProjetoNave
             Glut.glutSwapBuffers();
         }
 
-        private static float VelocidadePedra_Esquerda = 0.0030f;
-        private static float VelocidadePedra_Direita = 0.0030f;
-
         static void MoverPedra(int value) //move as pedras em time
         {
-            PedraDireita_Y -= VelocidadePedra_Direita;
+            if(_fim) return;
 
-            if (DuasPedras)
-                PedraEsquerda_Y -= VelocidadePedra_Esquerda;
+            _pedraDireitaY -= _velocidadePedraDireita;
+
+            if (_duasPedras)
+                _pedraEsquerdaY -= _velocidadePedraEsquerda;
 
             //-----------------------Voltar pedra ao inicio da tela-----------------------------
 
@@ -117,54 +117,54 @@ namespace ProjetoNave
             //    PedraEsquerda_X = -5.0f; //Numero rondomico de -5 a 5
             //}
 
-            if (PedraEsquerda_Y <= -9.0f || PedraDireita_Y <= -9.0f)
+            if (_pedraEsquerdaY <= -9.0f || _pedraDireitaY <= -9.0f)
             {
-                Pontuacao += 1;
-                Console.WriteLine($"Pontuação: {Pontuacao}");
+                _pontuacao += 1;
+                Console.Clear();
+                Console.WriteLine($"Pontuação: {_pontuacao}");
             }
 
-            Funcao.VerificaFinalPedra(ref PedraDireita_X, ref PedraDireita_Y, ref VelocidadePedra_Direita, ref PedraEsquerda_X, ref PedraEsquerda_Y, ref VelocidadePedra_Esquerda, ref Pontuacao, ref DuasPedras, ref rot);
+            Funcao.VerificaFinalPedra(ref _pedraDireitaX, ref _pedraDireitaY, ref _velocidadePedraDireita, ref _pedraEsquerdaX, ref _pedraEsquerdaY, ref _velocidadePedraEsquerda, ref _pontuacao, ref _duasPedras, ref _rot);
 
             //-----------------------------------------------------------------------------------
 
             //-------------------------------Colisão----------------------------------------------
 
-            float DiferencaDireita_X = PedraEsquerda_X - Bola_X;
-            float DiferencaDireita_Y = PedraEsquerda_Y - Bola_Y;
+            float diferencaDireitaX = _pedraEsquerdaX - _bolaX;
+            float diferencaDireitaY = _pedraEsquerdaY - _bolaY;
 
-            float DiferencaEsquerda_X = PedraDireita_X - Bola_X;
-            float DiferencaEsquerda_Y = PedraDireita_Y - Bola_Y;
+            float diferencaEsquerdaX = _pedraDireitaX - _bolaX;
+            float diferencaEsquerdaY = _pedraDireitaY - _bolaY;
 
-            if ((Math.Abs(DiferencaDireita_X) < 1.05f && Math.Abs(DiferencaDireita_Y) < 1.5f) || (Math.Abs(DiferencaEsquerda_X) < 1.05f && Math.Abs(DiferencaEsquerda_Y) < 1.5f))
+            if ((Math.Abs(diferencaDireitaX) < 1.05f && Math.Abs(diferencaDireitaY) < 3.5f) || (Math.Abs(diferencaEsquerdaX) < 1.05f && Math.Abs(diferencaEsquerdaY) < 3.5f))
             {
                 Console.WriteLine("Game Over!");
                 ManipulaArquivo arquivo = new ManipulaArquivo(@"pontuacao.txt");
-                var MelhorPontuacao = arquivo.LerPontuacao();
-                Console.WriteLine("Sua pontuação: "+Pontuacao);
-                Console.WriteLine("Pontuação Máxima: "+ MelhorPontuacao);
-                if (Pontuacao > MelhorPontuacao)
+                var melhorPontuacao = arquivo.LerPontuacao();
+                Console.WriteLine("Sua pontuação: "+_pontuacao);
+                Console.WriteLine("Pontuação Máxima: "+ melhorPontuacao);
+                if (_pontuacao > melhorPontuacao)
                 {
-                    Console.WriteLine("Parabéns!! Nova Pontuação Máxima: " + Pontuacao);
+                    Console.WriteLine("Parabéns!! Nova Pontuação Máxima: " + _pontuacao);
 
-                    arquivo.EscreverPontuacao(Pontuacao);
+                    arquivo.EscreverPontuacao(_pontuacao);
                 }
-                Console.ReadKey();
+                else
+                {
+                    arquivo.EscreverPontuacao(melhorPontuacao);
+                }
+
+                _fim = true;
             }
 
             //------------------------------------------------------------------------------------
 
             Glut.glutPostRedisplay();
             Glut.glutTimerFunc(1, MoverPedra, 1);
-
-            Console.WriteLine($"Rotacao: {rot}");
-            rot -= 0.2f; // Velocidade do giro da bola principal
+            
+            _rot -= 0.2f; // Velocidade do giro da bola principal
            // Console.WriteLine($"rot: {rot}");
                          
-        }
-
-        private void PararTela()
-        {
-
         }
 
         static void TeclasBola(int key, int x, int y) //Controle da bola principal 
@@ -173,29 +173,29 @@ namespace ProjetoNave
             {
                 case Glut.GLUT_KEY_UP:
 
-                    if (Bola_Y <= 5.5f)
-                        Bola_Y += 0.5f;
+                    if (_bolaY <= 5.5f)
+                        _bolaY += 0.5f;
 
                     break;
 
                 case Glut.GLUT_KEY_DOWN:
 
-                    if (Bola_Y >= -9.5f)
-                        Bola_Y -= 0.5f;
+                    if (_bolaY >= -9.5f)
+                        _bolaY -= 0.5f;
 
                     break;
 
                 case Glut.GLUT_KEY_LEFT:
 
-                    if (Bola_X >= -6.5f)
-                        Bola_X -= 0.5f;
+                    if (_bolaX >= -6.5f)
+                        _bolaX -= 0.5f;
 
                     break;
 
                 case Glut.GLUT_KEY_RIGHT:
 
-                    if (Bola_X <= 6.5f)
-                        Bola_X += 0.5f;
+                    if (_bolaX <= 6.5f)
+                        _bolaX += 0.5f;
 
                     break;
             }
@@ -210,9 +210,9 @@ namespace ProjetoNave
             Glut.glutInitWindowSize(600, 600);
             Glut.glutInitWindowPosition(100, 100);
             Glut.glutCreateWindow("Desvie dos obstaculos");
-            inicializa();
+            Inicializa();
             Gl.glEnable(Gl.GL_DEPTH_TEST);
-            Glut.glutDisplayFunc(desenha);
+            Glut.glutDisplayFunc(Desenha);
             Glut.glutSpecialFunc(TeclasBola);
             Glut.glutTimerFunc(50, MoverPedra, 1);
 

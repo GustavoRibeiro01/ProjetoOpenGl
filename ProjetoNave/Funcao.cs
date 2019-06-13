@@ -4,90 +4,90 @@ namespace ProjetoNave
 {
     public static class Funcao
     {
-        static int maxNivel1 = 3;
-        static int maxNivel2 = 6;
-        static int maxNivel3 = 9;
-        static int maxNivel4 = 12;
-        static int maxNivel5 = 15;
+        static int maxNivel1 = 4;
+        static int maxNivel2 = 8;
+        static int maxNivel3 = 12;
+        static int maxNivel4 = 16;
+        static int maxNivel5 = 20;
 
-        public static void VerificaFinalPedra(ref float x_pedra_direita, ref float y_pedra_direita, ref float velocidade_pedra_direita, ref float x_pedra_esquerda, ref float y_pedra_esquerda, ref float velocidade_pedra_esquerda, ref int pontuacao, ref bool duas_pedra, ref float rotacao)
+        public static void VerificaFinalPedra(ref float xPedraDireita, ref float yPedraDireita, ref float velocidadePedraDireita, ref float xPedraEsquerda, ref float yPedraEsquerda, ref float velocidadePedraEsquerda, ref int pontuacao, ref bool duasPedra, ref float rotacao)
         {
 
-            if (y_pedra_direita <= -9.0f)
+            if (yPedraDireita <= -9.0f)
             {
                 //Velocidade
                 if (pontuacao <= maxNivel1)
                 {
-                    velocidade_pedra_direita = RandomNumber(30, 45) / 10000;
+                    velocidadePedraDireita = RandomNumber(40, 90) / 10000;
                     //rotacao = 400.1f;
                 }
                 else if (pontuacao <= maxNivel2)
                 {
-                    velocidade_pedra_direita = RandomNumber(45, 60) / 10000;
+                    velocidadePedraDireita = RandomNumber(90, 150) / 10000;
                     //rotacao = 0.2f;
                 }
                 else if (pontuacao <= maxNivel3)
                 {
-                    velocidade_pedra_direita = RandomNumber(30, 45) / 10000;
+                    velocidadePedraDireita = RandomNumber(40, 90) / 10000;
                     //rotacao = 0.3f;
-                    duas_pedra = true;
+                    duasPedra = true;
                 }
                 else if (pontuacao <= maxNivel4)
                 {
-                    velocidade_pedra_direita = RandomNumber(45, 50) / 10000;
+                    velocidadePedraDireita = RandomNumber(90, 150) / 10000;
                 }
                 else if (pontuacao <= maxNivel5)
                 {
-                    velocidade_pedra_direita = RandomNumber(60, 80) / 10000;
+                    velocidadePedraDireita = RandomNumber(150, 300) / 10000;
                 }
 
                 //Posição
-                y_pedra_direita = 8.7f;
-                if (duas_pedra)
+                yPedraDireita = 8.7f;
+                if (duasPedra)
                 {
-                    x_pedra_direita = RandomNumber(1, 5);
+                    xPedraDireita = RandomNumber(1, 5);
                 }
                 else
                 {
-                    x_pedra_direita = RandomNumber(0, 5);
+                    xPedraDireita = RandomNumber(0, 5);
                     if (RandomNumber(1, 2) == 1) //se 1 mudar para negativo
                     {
-                        x_pedra_direita *= -1;
+                        xPedraDireita *= -1;
                     }
 
                 }
             }
-            if (duas_pedra)
+            if (duasPedra)
             {
-                if (y_pedra_esquerda <= -9.0f)
+                if (yPedraEsquerda <= -9.0f)
                 {
                     //Velocidade
                     if (pontuacao <= maxNivel1)
                     {
-                        velocidade_pedra_esquerda = RandomNumber(30, 45) / 10000;
+                        velocidadePedraEsquerda = RandomNumber(40, 90) / 10000;
                     }
                     else if (pontuacao <= maxNivel2)
                     {
-                        velocidade_pedra_esquerda = RandomNumber(45, 60) / 10000;
+                        velocidadePedraEsquerda = RandomNumber(90, 150) / 10000;
                     }
                     else if (pontuacao <= maxNivel3)
                     {
-                        velocidade_pedra_esquerda = RandomNumber(30, 45) / 10000;
-                        duas_pedra = true;
+                        velocidadePedraEsquerda = RandomNumber(40, 90) / 10000;
+                        duasPedra = true;
                     }
                     else if (pontuacao <= maxNivel4)
                     {
-                        velocidade_pedra_esquerda = RandomNumber(45, 60) / 10000;
+                        velocidadePedraEsquerda = RandomNumber(90, 150) / 10000;
                     }
                     else if (pontuacao <= maxNivel5)
                     {
-                        velocidade_pedra_esquerda = RandomNumber(60, 80) / 10000;
+                        velocidadePedraEsquerda = RandomNumber(150, 300) / 10000;
                     }
 
                     //Posição
-                    y_pedra_esquerda = 8.7f;
+                    yPedraEsquerda = 8.7f;
 
-                    x_pedra_esquerda = RandomNumber(1, 5) * -1;
+                    xPedraEsquerda = RandomNumber(1, 5) * -1;
                     
                 }
             }
