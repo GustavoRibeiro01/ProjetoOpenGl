@@ -39,17 +39,17 @@ namespace ProjetoNave
                 }
 
                 //Posição
-                x_pedra_direita = 0;
+                y_pedra_direita = 0;
                 if (duas_pedra)
                 {
-                    y_pedra_direita = RandomNumber(0, 5);
+                    x_pedra_direita = RandomNumber(1, 5);
                 }
                 else
                 {
-                    y_pedra_direita = RandomNumber(0, 5);
+                    x_pedra_direita = RandomNumber(0, 5);
                     if (RandomNumber(1, 2) == 1) //se 1 mudar para negativo
                     {
-                        y_pedra_direita *= -1;
+                        x_pedra_direita *= -1;
                     }
 
                 }
@@ -82,10 +82,10 @@ namespace ProjetoNave
                     }
 
                     //Posição
-                    x_pedra_esquerda = 0;
+                    y_pedra_esquerda = 0;
 
-                    y_pedra_esquerda = RandomNumber(0, 5);
-                    y_pedra_esquerda *= -1; //mudar para negativo
+                    x_pedra_esquerda = RandomNumber(1, 5) * -1;
+                    
                 }
             }
 
