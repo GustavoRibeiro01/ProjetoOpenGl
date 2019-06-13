@@ -12,6 +12,7 @@ namespace ProjetoNave
 
         static void VerificaFinalPedra(ref double x_pedra_direita, ref double y_pedra_direita, ref double velocidade_pedra_direita, ref double x_pedra_esquerda, ref double y_pedra_esquerda, ref double velocidade_pedra_esquerda, ref double pontuacao, ref bool duas_pedra)
         {
+
             if (y_pedra_direita <= -9.0f)
             {
                 //Velocidade
