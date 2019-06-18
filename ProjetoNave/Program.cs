@@ -6,6 +6,8 @@ namespace ProjetoNave
 {
     class Program
     {
+        static float angle = 0;
+
         static float _rot = 0.0f; //Responsavel por rotacionar a bola principal
         static bool _duasPedras; //Habilitar segunda pedra
         static int _pontuacao = 0;
@@ -13,12 +15,12 @@ namespace ProjetoNave
         static bool _fim;
 
         //Variaveis Pedra Esquerda
-        static float _pedraEsquerdaX = 5.0f;
-        static float _pedraEsquerdaY = 0.0f;
+        static float _pedraEsquerdaX = -4.0f;
+        static float _pedraEsquerdaY = 6.0f;
 
         //Variaveis Pedra Direita
-        static float _pedraDireitaX = 5.0f;
-        static float _pedraDireitaY = 0.0f;
+        static float _pedraDireitaX = 4.0f;
+        static float _pedraDireitaY = 6.0f;
 
         //variaveis para locomover a bola
         static float _bolaX = 0.0f; //Mover para esquerda ou para direita
@@ -32,12 +34,18 @@ namespace ProjetoNave
 
         static void Inicializa()
         {
+            
+            //float[] posicaoLuz = { 0.0f, 50.0f, 50.0f, 1.0f };
+
+            //Ativa o uso da luz ambiente
+            //Gl.glLightfv(Gl.GL_LIGHT0, Gl.GL_POSITION, posicaoLuz);
+
             Gl.glMatrixMode(Gl.GL_PROJECTION);
             Gl.glLoadIdentity();
             Glu.gluPerspective(35.0f, 1.0, 0.001, 100.0);
             Gl.glMatrixMode(Gl.GL_MODELVIEW);
             Glu.gluLookAt(0.0, 14.0, 14.0, 0.0, 5.0, 5.0, 0.0, 10.0, 0.0);
-            Gl.glClearColor(0, 1, 0, 0.0f);
+            Gl.glClearColor(0, 0.6f, 0, 0.0f);
 
             Gl.glEnable(Gl.GL_DEPTH_TEST);
             Gl.glEnable(Gl.GL_LIGHT0);
@@ -45,7 +53,45 @@ namespace ProjetoNave
             Gl.glEnable(Gl.GL_COLOR_MATERIAL);
             Gl.glColorMaterial(Gl.GL_FRONT_AND_BACK, Gl.GL_AMBIENT_AND_DIFFUSE);
             Gl.glShadeModel(Gl.GL_SMOOTH);
+            
         }
+
+        static void luz()
+        {
+            float[] luzAmbiente = { 0.2f, 0.2f, 0.2f, 1.0f };
+            // "cor"
+            float[] luzDifusa = { 1.0f, 0.7f, 0.2f, 0.0f };
+            float[] luzEspecular = { 0.5f, 0.5f, 0.5f, 1f };// "brilho"
+            float[] posicaoLuz = { 0.0f, 5f, 5f, 1.0f };
+            // Capacidade de brilho do material
+            float[] especularidade = { 1.0f, 1.0f, 1.0f, 1.0f };
+            int especMaterial = 60;
+            // Especifica que a cor de fundo da janela será verde
+            Gl.glClearColor(0.0f, 0.4f, 0f, 0.0f);
+            // Habilita o modelo de colorização de Gouraud
+            Gl.glShadeModel(Gl.GL_SMOOTH);
+            // Define a refletância do material
+            Gl.glMaterialfv(Gl.GL_FRONT, Gl.GL_SPECULAR, especularidade);
+            // Define a concentração do brilho
+            Gl.glMateriali(Gl.GL_FRONT, Gl.GL_SHININESS, especMaterial);
+            // Ativa o uso da luz ambiente
+            Gl.glLightModelfv(Gl.GL_LIGHT_MODEL_AMBIENT, luzAmbiente);
+            // Define os parâmetros da luz de número 0
+            Gl.glLightfv(Gl.GL_LIGHT0, Gl.GL_AMBIENT, luzAmbiente);
+            Gl.glLightfv(Gl.GL_LIGHT0, Gl.GL_DIFFUSE, luzDifusa);
+            Gl.glLightfv(Gl.GL_LIGHT0, Gl.GL_SPECULAR, luzEspecular);
+            Gl.glLightfv(Gl.GL_LIGHT0, Gl.GL_POSITION, posicaoLuz);
+            // Habilita a definição da cor do material a partir da cor corrente
+            Gl.glEnable(Gl.GL_COLOR_MATERIAL);
+            //Habilita o uso de iluminação
+            Gl.glEnable(Gl.GL_LIGHTING);
+            // Habilita a luz de número 0
+            Gl.glEnable(Gl.GL_LIGHT0);
+            // Habilita o depth-buffering
+            Gl.glEnable(Gl.GL_DEPTH_TEST);
+            angle = 45;
+        }
+
 
         static void Desenha()
         {
@@ -109,20 +155,16 @@ namespace ProjetoNave
             if (_duasPedras)
                 _pedraEsquerdaY -= _velocidadePedraEsquerda;
 
-            //-----------------------Voltar pedra ao inicio da tela-----------------------------
-
-            //if (PedraEsquerda_Y <= -9.0f)
-            //{
-            //    PedraEsquerda_Y = 8.7f;
-            //    PedraEsquerda_X = -5.0f; //Numero rondomico de -5 a 5
-            //}
-
+           
+            
             if (_pedraEsquerdaY <= -9.0f || _pedraDireitaY <= -9.0f)
             {
                 _pontuacao += 1;
                 Console.Clear();
                 Console.WriteLine($"Pontuação: {_pontuacao}");
             }
+
+            //-----------------------Voltar pedra ao inicio da tela-----------------------------
 
             Funcao.VerificaFinalPedra(ref _pedraDireitaX, ref _pedraDireitaY, ref _velocidadePedraDireita, ref _pedraEsquerdaX, ref _pedraEsquerdaY, ref _velocidadePedraEsquerda, ref _pontuacao, ref _duasPedras, ref _rot);
 
@@ -136,7 +178,7 @@ namespace ProjetoNave
             float diferencaEsquerdaX = _pedraDireitaX - _bolaX;
             float diferencaEsquerdaY = _pedraDireitaY - _bolaY;
 
-            if ((Math.Abs(diferencaDireitaX) < 1.05f && Math.Abs(diferencaDireitaY) < 3.5f) || (Math.Abs(diferencaEsquerdaX) < 1.05f && Math.Abs(diferencaEsquerdaY) < 3.5f))
+            if ((Math.Abs(diferencaDireitaX) < 1.03f && Math.Abs(diferencaDireitaY) < 2.9f) || (Math.Abs(diferencaEsquerdaX) < 1.03f && Math.Abs(diferencaEsquerdaY) < 2.9f))
             {
                 Console.WriteLine("Game Over!");
                 ManipulaArquivo arquivo = new ManipulaArquivo(@"pontuacao.txt");
@@ -169,21 +211,10 @@ namespace ProjetoNave
 
         static void TeclasBola(int key, int x, int y) //Controle da bola principal 
         {
+            if (_fim) return;
             switch (key)
             {
-                case Glut.GLUT_KEY_UP:
-
-                    if (_bolaY <= 5.5f)
-                        _bolaY += 0.5f;
-
-                    break;
-
-                case Glut.GLUT_KEY_DOWN:
-
-                    if (_bolaY >= -9.5f)
-                        _bolaY -= 0.5f;
-
-                    break;
+                
 
                 case Glut.GLUT_KEY_LEFT:
 
@@ -215,7 +246,7 @@ namespace ProjetoNave
             Glut.glutDisplayFunc(Desenha);
             Glut.glutSpecialFunc(TeclasBola);
             Glut.glutTimerFunc(50, MoverPedra, 1);
-
+            luz();
             Glut.glutMainLoop();
 
         }
